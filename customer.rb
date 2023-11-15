@@ -1,39 +1,25 @@
-class Movie
+class Movie < Struct.new(:title, :price_code)
   REGULAR = 0
   NEW_RELEASE = 1
   CHILDRENS = 2
-
-  attr_reader :title, :price_code
-
-  def initialize(title, price_code)
-    @title, @price_code = title, price_code
-  end
 end
 
-class Rental
-  attr_reader :movie, :days_rented
-
-  def initialize(movie, days_rented)
-    @movie, @days_rented = movie, days_rented
-  end
+class Rental < Struct.new(:movie, :days_rented)
 end
 
-class Customer
-  attr_reader :name
-
+class Customer < Struct.new(:name, :rentals)
   def initialize(name)
-    @name = name
-    @rentals = []
+    super(name, [])
   end
 
-  def add_rental(arg)
-    @rentals << arg
+  def add_rental(rental)
+    rentals << rental
   end
 
   def statement
     total_amount, frequent_renter_points = 0, 0
-    result = "Rental Record for #{@name}\n"
-    @rentals.each do |element|
+    result = "Rental Record for #{name}\n"
+    rentals.each do |element|
       this_amount = 0
 
       # determine amounts for each line
