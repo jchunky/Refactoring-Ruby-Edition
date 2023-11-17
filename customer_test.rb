@@ -24,12 +24,12 @@ class CustomerTest < Minitest::Test
         Regular Movie 3 3.5
         Regular Movie 4 5.0
         Regular Movie 5 6.5
-        New Release 1 3
-        New Release 2 6
-        New Release 3 9
-        New Release 4 12
-        New Release 5 15
-        New Release 6 18
+        New Release 1 3.0
+        New Release 2 6.0
+        New Release 3 9.0
+        New Release 4 12.0
+        New Release 5 15.0
+        New Release 6 18.0
         Children Movie 1  1.5
         Children Movie 2  1.5
         Children Movie 3  1.5

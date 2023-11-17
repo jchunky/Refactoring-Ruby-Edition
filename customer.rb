@@ -10,7 +10,7 @@ end
 
 class NewReleaseMovieCategory
   def price(rental)
-    rental.days_rented * 3
+    rental.days_rented * 3.0
   end
 
   def frequent_renter_points(rental)
