@@ -4,7 +4,7 @@ require_relative "customer"
 
 class CustomerTest < Minitest::Test
   def test_statement
-    customer = Customer.new("Customer Name")
+    customer = Customer.new("John Smith")
     (1..5).each do |i|
       customer.add_rental(build_rental("Regular Movie #{i}", Movie::REGULAR, days_rented: i))
     end
@@ -18,7 +18,7 @@ class CustomerTest < Minitest::Test
     statement = customer.statement
 
     assert_equal(<<~EXPECTED_STATEMENT.squish, statement.squish, statement)
-      Rental Record for Customer Name
+      Rental Record for John Smith
         Regular Movie 1         $2.00
         Regular Movie 2         $2.00
         Regular Movie 3         $3.50
