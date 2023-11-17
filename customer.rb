@@ -1,4 +1,4 @@
-class RegularMovie
+class RegularMovieCategory
   def price(rental)
     ((rental.days_rented * 1.5) - 1).clamp(2..)
   end
@@ -8,7 +8,7 @@ class RegularMovie
   end
 end
 
-class NewReleaseMovie
+class NewReleaseMovieCategory
   def price(rental)
     rental.days_rented * 3
   end
@@ -18,7 +18,7 @@ class NewReleaseMovie
   end
 end
 
-class ChildrensMovie
+class ChildrensMovieCategory
   def price(rental)
     ((rental.days_rented * 1.5) - 3).clamp(1.5..)
   end
@@ -29,9 +29,9 @@ class ChildrensMovie
 end
 
 class Movie < Struct.new(:title, :movie_category)
-  REGULAR = RegularMovie.new
-  NEW_RELEASE = NewReleaseMovie.new
-  CHILDRENS = ChildrensMovie.new
+  REGULAR = RegularMovieCategory.new
+  NEW_RELEASE = NewReleaseMovieCategory.new
+  CHILDRENS = ChildrensMovieCategory.new
 
   delegate :price, :frequent_renter_points, to: :movie_category
 end
