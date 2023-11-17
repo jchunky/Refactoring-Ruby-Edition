@@ -19,23 +19,23 @@ class CustomerTest < Minitest::Test
 
     assert_equal(<<~EXPECTED_STATEMENT.squish, statement.squish, statement)
       Rental Record for Customer Name
-        Regular Movie 1 2.0
-        Regular Movie 2 2.0
-        Regular Movie 3 3.5
-        Regular Movie 4 5.0
-        Regular Movie 5 6.5
-        New Release 1 3.0
-        New Release 2 6.0
-        New Release 3 9.0
-        New Release 4 12.0
-        New Release 5 15.0
-        New Release 6 18.0
-        Children Movie 1  1.5
-        Children Movie 2  1.5
-        Children Movie 3  1.5
-        Children Movie 4  3.0
-        Children Movie 5  4.5
-      Amount owed is 94.0
+        Regular Movie 1         $2.00
+        Regular Movie 2         $2.00
+        Regular Movie 3         $3.50
+        Regular Movie 4         $5.00
+        Regular Movie 5         $6.50
+        New Release 1           $3.00
+        New Release 2           $6.00
+        New Release 3           $9.00
+        New Release 4          $12.00
+        New Release 5          $15.00
+        New Release 6          $18.00
+        Children Movie 1        $1.50
+        Children Movie 2        $1.50
+        Children Movie 3        $1.50
+        Children Movie 4        $3.00
+        Children Movie 5        $4.50
+      Amount owed is $94.00
       You earned 21 frequent renter points
     EXPECTED_STATEMENT
   end

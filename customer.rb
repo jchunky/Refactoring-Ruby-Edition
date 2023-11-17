@@ -66,7 +66,7 @@ class CustomerStatementFormatter < SimpleDelegator
     [
       "Rental Record for #{customer_name}",
       rentals.map(&method(:format_rental)),
-      "Amount owed is #{total_amount}",
+      "Amount owed is #{format_price(total_amount)}",
       "You earned #{frequent_renter_points} frequent renter points",
     ].join("\n")
   end
@@ -74,7 +74,11 @@ class CustomerStatementFormatter < SimpleDelegator
   private
 
   def format_rental(rental)
-    "\t#{rental.title}\t#{rental.price}"
+    format("  %-20s  %7s", rental.title, format_price(rental.price))
+  end
+
+  def format_price(price)
+    format("$%.2f", price)
   end
 end
 
