@@ -1,66 +1,104 @@
-class Movie
-  REGULAR = 0
-  NEW_RELEASE = 1
-  CHILDRENS = 2
+class RegularMovieCategory
+  def price(rental)
+    ((rental.days_rented * 1.5) - 1).clamp(2..)
+  end
 
-  attr_reader :title, :price_code
-
-  def initialize(title, price_code)
-    @title, @price_code = title, price_code
+  def frequent_renter_points(rental)
+    1
   end
 end
 
-class Rental
-  attr_reader :movie, :days_rented
+class NewReleaseMovieCategory
+  def price(rental)
+    rental.days_rented * 3
+  end
 
-  def initialize(movie, days_rented)
-    @movie, @days_rented = movie, days_rented
+  def frequent_renter_points(rental)
+    rental.days_rented > 1 ? 2 : 1
   end
 end
 
-class Customer
-  attr_reader :name
+class ChildrensMovieCategory
+  def price(rental)
+    ((rental.days_rented * 1.5) - 3).clamp(1.5..)
+  end
 
+  def frequent_renter_points(rental)
+    1
+  end
+end
+
+class Movie < Struct.new(:title, :movie_category)
+  REGULAR = RegularMovieCategory.new
+  NEW_RELEASE = NewReleaseMovieCategory.new
+  CHILDRENS = ChildrensMovieCategory.new
+
+  delegate :price, :frequent_renter_points, to: :movie_category
+end
+
+class Rental < Struct.new(:movie, :days_rented)
+  delegate :title, to: :movie
+
+  def price
+    movie.price(self)
+  end
+
+  def frequent_renter_points
+    movie.frequent_renter_points(self)
+  end
+end
+
+class CustomerStatement < Struct.new(:customer)
+  delegate :name, to: :customer, prefix: true
+  delegate :rentals, to: :customer
+
+  def total_amount
+    rentals.sum(&:price)
+  end
+
+  def frequent_renter_points
+    rentals.sum(&:frequent_renter_points)
+  end
+end
+
+class CustomerStatementFormatter < SimpleDelegator
+  def to_s
+    [
+      "Rental Record for #{customer_name}",
+      nil,
+      rentals.map(&method(:format_rental)),
+      line("", "--------"),
+      line("Total", price(total_amount)),
+      nil,
+      "You earned #{frequent_renter_points} frequent renter points",
+    ].join("\n")
+  end
+
+  private
+
+  def format_rental(rental)
+    line(rental.title, price(rental.price))
+  end
+
+  def line(left, right)
+    format("  %-30s %10s", left, right)
+  end
+
+  def price(price)
+    format("%.2f", price)
+  end
+end
+
+class Customer < Struct.new(:name, :rentals)
   def initialize(name)
-    @name = name
-    @rentals = []
+    super(name, [])
   end
 
-  def add_rental(arg)
-    @rentals << arg
+  def add_rental(rental)
+    rentals << rental
   end
 
   def statement
-    total_amount, frequent_renter_points = 0, 0
-    result = "Rental Record for #{@name}\n"
-    @rentals.each do |element|
-      this_amount = 0
-
-      # determine amounts for each line
-      case element.movie.price_code
-      when Movie::REGULAR
-        this_amount += 2
-        this_amount += (element.days_rented - 2) * 1.5 if element.days_rented > 2
-      when Movie::NEW_RELEASE
-        this_amount += element.days_rented * 3
-      when Movie::CHILDRENS
-        this_amount += 1.5
-        this_amount += (element.days_rented - 3) * 1.5 if element.days_rented > 3
-      end
-
-      # add frequent renter points
-      frequent_renter_points += 1
-      # add bonus for a two day new release rental
-      if element.movie.price_code == Movie::NEW_RELEASE && element.days_rented > 1
-        frequent_renter_points += 1
-      end
-      # show figures for this rental
-      result += "\t#{element.movie.title}\t#{this_amount}\n"
-      total_amount += this_amount
-    end
-    # add footer lines
-    result += "Amount owed is #{total_amount}\n"
-    result += "You earned #{frequent_renter_points} frequent renter points"
-    result
+    CustomerStatementFormatter.new(CustomerStatement.new(self)).to_s
   end
 end
