@@ -28,15 +28,17 @@ class ChildrensMovie
   end
 end
 
-class Movie < Struct.new(:title, :price_code)
+class Movie < Struct.new(:title, :movie_category)
   REGULAR = RegularMovie.new
   NEW_RELEASE = NewReleaseMovie.new
   CHILDRENS = ChildrensMovie.new
 
-  delegate :price, :frequent_renter_points, to: :price_code
+  delegate :price, :frequent_renter_points, to: :movie_category
 end
 
 class Rental < Struct.new(:movie, :days_rented)
+  delegate :title, to: :movie
+
   def price
     movie.price(self)
   end
@@ -72,7 +74,7 @@ class StatementFormatter < SimpleDelegator
   private
 
   def format_rental(rental)
-    "\t#{rental.movie.title}\t#{rental.price}"
+    "\t#{rental.title}\t#{rental.price}"
   end
 end
 
