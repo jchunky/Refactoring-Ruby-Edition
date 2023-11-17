@@ -74,7 +74,7 @@ class CustomerStatementFormatter < SimpleDelegator
   private
 
   def format_rental(rental)
-    format("  %-20s  %7s", rental.title, format_price(rental.price))
+    format("  %-30s  %7s", rental.title, format_price(rental.price))
   end
 
   def format_price(price)

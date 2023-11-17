@@ -6,13 +6,13 @@ class CustomerTest < Minitest::Test
   def test_statement
     customer = Customer.new("John Smith")
     (1..5).each do |i|
-      customer.add_rental(build_rental("Regular Movie #{i}", Movie::REGULAR, days_rented: i))
+      customer.add_rental(build_rental("Regular Movie - #{i} days rented", Movie::REGULAR, days_rented: i))
     end
     (1..6).each do |i|
-      customer.add_rental(build_rental("New Release #{i}", Movie::NEW_RELEASE, days_rented: i))
+      customer.add_rental(build_rental("New Release - #{i} days rented", Movie::NEW_RELEASE, days_rented: i))
     end
     (1..5).each do |i|
-      customer.add_rental(build_rental("Children Movie #{i}", Movie::CHILDRENS, days_rented: i))
+      customer.add_rental(build_rental("Children Movie - #{i} days rented", Movie::CHILDRENS, days_rented: i))
     end
 
     statement = customer.statement
