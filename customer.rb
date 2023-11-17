@@ -1,6 +1,6 @@
 class RegularMovieCategory
   def price(rental)
-    ((rental.days_rented * 1.5) - 1).clamp(2..)
+    ((rental.days_rented * 1.5) - 1).clamp(2.0..)
   end
 
   def frequent_renter_points(rental)

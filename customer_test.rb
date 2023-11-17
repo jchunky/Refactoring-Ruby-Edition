@@ -19,7 +19,7 @@ class CustomerTest < Minitest::Test
 
     assert_equal(<<~EXPECTED_STATEMENT.squish, statement.squish, statement)
       Rental Record for Customer Name
-        Regular Movie 1 2
+        Regular Movie 1 2.0
         Regular Movie 2 2.0
         Regular Movie 3 3.5
         Regular Movie 4 5.0
