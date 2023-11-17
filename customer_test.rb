@@ -19,22 +19,22 @@ class CustomerTest < Minitest::Test
 
     assert_equal(<<~EXPECTED_STATEMENT.squish, statement.squish, statement)
       Rental Record for John Smith
-        Regular Movie 1         $2.00
-        Regular Movie 2         $2.00
-        Regular Movie 3         $3.50
-        Regular Movie 4         $5.00
-        Regular Movie 5         $6.50
-        New Release 1           $3.00
-        New Release 2           $6.00
-        New Release 3           $9.00
-        New Release 4          $12.00
-        New Release 5          $15.00
-        New Release 6          $18.00
-        Children Movie 1        $1.50
-        Children Movie 2        $1.50
-        Children Movie 3        $1.50
-        Children Movie 4        $3.00
-        Children Movie 5        $4.50
+        Regular Movie - 1 days rented     $2.00
+        Regular Movie - 2 days rented     $2.00
+        Regular Movie - 3 days rented     $3.50
+        Regular Movie - 4 days rented     $5.00
+        Regular Movie - 5 days rented     $6.50
+        New Release - 1 days rented       $3.00
+        New Release - 2 days rented       $6.00
+        New Release - 3 days rented       $9.00
+        New Release - 4 days rented      $12.00
+        New Release - 5 days rented      $15.00
+        New Release - 6 days rented      $18.00
+        Children Movie - 1 days rented    $1.50
+        Children Movie - 2 days rented    $1.50
+        Children Movie - 3 days rented    $1.50
+        Children Movie - 4 days rented    $3.00
+        Children Movie - 5 days rented    $4.50
       Amount owed is $94.00
       You earned 21 frequent renter points
     EXPECTED_STATEMENT
