@@ -48,7 +48,7 @@ class Rental < Struct.new(:movie, :days_rented)
   end
 end
 
-class Statement < Struct.new(:customer)
+class CustomerStatement < Struct.new(:customer)
   delegate :name, to: :customer, prefix: true
   delegate :rentals, to: :customer
 
@@ -61,7 +61,7 @@ class Statement < Struct.new(:customer)
   end
 end
 
-class StatementFormatter < SimpleDelegator
+class CustomerStatementFormatter < SimpleDelegator
   def to_s
     [
       "Rental Record for #{customer_name}",
@@ -88,6 +88,6 @@ class Customer < Struct.new(:name, :rentals)
   end
 
   def statement
-    StatementFormatter.new(Statement.new(self)).to_s
+    CustomerStatementFormatter.new(CustomerStatement.new(self)).to_s
   end
 end
