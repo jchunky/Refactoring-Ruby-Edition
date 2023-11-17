@@ -16,7 +16,7 @@ class CustomerTest < Minitest::Test
 
     assert_equal(<<~EXPECTED_STATEMENT.squish, statement.squish, statement)
       Rental Record for John
-        The Scarlet Pimpernel 2
+        The Scarlet Pimpernel 2.0
         Chinatown 3.5
         Batman  3
         Dune  6

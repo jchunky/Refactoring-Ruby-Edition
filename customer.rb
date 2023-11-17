@@ -1,9 +1,6 @@
-class Regular
+class RegularMovie
   def price(rental)
-    result = 0
-    result += 2
-    result += (rental.days_rented - 2) * 1.5 if rental.days_rented > 2
-    result
+    ((rental.days_rented * 1.5) - 1).clamp(2..)
   end
 
   def frequent_renter_points(rental)
@@ -11,7 +8,7 @@ class Regular
   end
 end
 
-class NewRelease
+class NewReleaseMovie
   def price(rental)
     rental.days_rented * 3
   end
@@ -21,12 +18,9 @@ class NewRelease
   end
 end
 
-class Childrens
+class ChildrensMovie
   def price(rental)
-    result = 0
-    result += 1.5
-    result += (rental.days_rented - 3) * 1.5 if rental.days_rented > 3
-    result
+    ((rental.days_rented * 1.5) - 3).clamp(1.5..)
   end
 
   def frequent_renter_points(rental)
@@ -35,12 +29,51 @@ class Childrens
 end
 
 class Movie < Struct.new(:title, :price_code)
-  REGULAR = Regular.new
-  NEW_RELEASE = NewRelease.new
-  CHILDRENS = Childrens.new
+  REGULAR = RegularMovie.new
+  NEW_RELEASE = NewReleaseMovie.new
+  CHILDRENS = ChildrensMovie.new
+
+  delegate :price, :frequent_renter_points, to: :price_code
 end
 
 class Rental < Struct.new(:movie, :days_rented)
+  def price
+    movie.price(self)
+  end
+
+  def frequent_renter_points
+    movie.frequent_renter_points(self)
+  end
+end
+
+class Statement < Struct.new(:customer)
+  delegate :name, to: :customer, prefix: true
+  delegate :rentals, to: :customer
+
+  def total_amount
+    rentals.sum(&:price)
+  end
+
+  def frequent_renter_points
+    rentals.sum(&:frequent_renter_points)
+  end
+end
+
+class StatementFormatter < SimpleDelegator
+  def to_s
+    [
+      "Rental Record for #{customer_name}",
+      rentals.map(&method(:format_rental)),
+      "Amount owed is #{total_amount}",
+      "You earned #{frequent_renter_points} frequent renter points",
+    ].join("\n")
+  end
+
+  private
+
+  def format_rental(rental)
+    "\t#{rental.movie.title}\t#{rental.price}"
+  end
 end
 
 class Customer < Struct.new(:name, :rentals)
@@ -48,21 +81,11 @@ class Customer < Struct.new(:name, :rentals)
     super(name, [])
   end
 
-  def add_rental(arg)
-    rentals << arg
+  def add_rental(rental)
+    rentals << rental
   end
 
   def statement
-    total_amount, frequent_renter_points = 0, 0
-    result = "Rental Record for #{name}\n"
-    rentals.each do |rental|
-      this_amount = rental.movie.price_code.price(rental)
-      frequent_renter_points += rental.movie.price_code.frequent_renter_points(rental)
-      result += "\t#{rental.movie.title}\t#{this_amount}\n"
-      total_amount += this_amount
-    end
-    result += "Amount owed is #{total_amount}\n"
-    result += "You earned #{frequent_renter_points} frequent renter points"
-    result
+    StatementFormatter.new(Statement.new(self)).to_s
   end
 end
