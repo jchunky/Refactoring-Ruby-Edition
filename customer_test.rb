@@ -20,7 +20,7 @@ class CustomerTest < Minitest::Test
     assert_equal(<<~EXPECTED_STATEMENT.squish, statement.squish, statement)
       Rental Record for John Smith
         Regular Movie - 1 days rented 2
-        Regular Movie - 2 days rented 2
+        Regular Movie - 2 days rented 2.0
         Regular Movie - 3 days rented 3.5
         Regular Movie - 4 days rented 5.0
         Regular Movie - 5 days rented 6.5
