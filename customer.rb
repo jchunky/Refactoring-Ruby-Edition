@@ -1,6 +1,6 @@
 class Regular
   def price(rental)
-    (rental.days_rented * 1.5 - 1).clamp(2..)
+    ((rental.days_rented * 1.5) - 1).clamp(2..)
   end
 
   def frequent_renter_points(rental)
@@ -20,7 +20,7 @@ end
 
 class Childrens
   def price(rental)
-    (rental.days_rented * 1.5 - 3).clamp(1.5..)
+    ((rental.days_rented * 1.5) - 3).clamp(1.5..)
   end
 
   def frequent_renter_points(rental)
